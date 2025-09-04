@@ -1,0 +1,13 @@
+model Auth {
+  id Int @id @default(autoincrement())
+  // Add other auth-related fields like password hash
+  // password String
+
+  // 1. Foreign Key Field: This is the actual column in your database.
+  // The @unique attribute enforces a one-to-one relationship.
+  user_id Int @unique
+
+  // 2. Relation Field: This connects to the User model for Prisma Client.
+  // It links this model's `userId` field to the `User` model's `id` field. 🔗
+  user User @relation(fields: [user_id], references: [id])
+}

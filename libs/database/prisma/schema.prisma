@@ -1,34 +1,10 @@
+// libs/prisma/schema.prisma
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-model Auth {
-  id Int @id @default(autoincrement())
-  // Add other auth-related fields like password hash
-  // password String
-
-  // 1. Foreign Key Field: This is the actual column in your database.
-  // The @unique attribute enforces a one-to-one relationship.
-  user_id Int @unique
-
-  // 2. Relation Field: This connects to the User model for Prisma Client.
-  // It links this model's `userId` field to the `User` model's `id` field. 🔗
-  user User @relation(fields: [user_id], references: [id])
-}
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  phone String  @unique
-  image String?
-  // ... other user fields
-
-  // This is the back-relation to link to the Auth model
-  // The '?' makes it optional, as a user might exist without an auth record
-  auth Auth?
 }

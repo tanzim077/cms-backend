@@ -1,10 +1,1 @@
-// libs/database/src/database.module.ts
-
-import { Module } from '@nestjs/common';
-import { DatabaseService } from './database.service';
-
-@Module({
-  providers: [DatabaseService],
-  exports: [DatabaseService], // Export the service so other modules can use it
-})
-export class DatabaseModule {}
+import { Global, Module } from '@nestjs/common';import { DatabaseService } from '@app/database/database.service';@Global()@Module({  providers: [DatabaseService],  exports: [DatabaseService],})export class DatabaseModule {}

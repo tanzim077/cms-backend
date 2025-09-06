@@ -1,11 +1,15 @@
 model Permission {
-  id           Int                            @id @default(autoincrement())
-  title        String
-  description  String?
-  code         String                         @unique
-  level        Int                            @default(1)
-  createdAt    DateTime                       @default(now())
-  updatedAt    DateTime                       @updatedAt
-  allowedBy    RolesOnAllowedPermissions[]
-  restrictedBy RolesOnRestrictedPermissions[]
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  code        String   @unique
+  level       Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // back relation for "allowed"
+  rolesAllowed Role[] @relation("AllowedPermissions")
+
+  // back relation for "restricted"
+  rolesRestricted Role[] @relation("RestrictedPermissions")
 }

@@ -1,9 +1,15 @@
 model Role {
-  id          Int                            @id @default(autoincrement())
-  name        String                         @unique
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
   description String
-  allowed     RolesOnAllowedPermissions[]
-  restricted  RolesOnRestrictedPermissions[]
-  createdAt   DateTime                       @default(now())
-  updatedAt   DateTime                       @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // allowed permissions
+  allowedPermissions  Permission[] @relation("AllowedPermissions")
+  allowedPermissionId Int[]
+
+  // restricted permissions
+  restrictedPermissions  Permission[] @relation("RestrictedPermissions")
+  restrictedPermissionId Int[]
 }

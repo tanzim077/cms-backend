@@ -3,6 +3,7 @@ import { ApiController } from './api.controller';
 import { ApiService } from './api.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { DatabaseModule } from '@app/database';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtModule } from '@nestjs/jwt';
         };
       },
     }),
+    DatabaseModule,
   ],
   controllers: [ApiController],
   providers: [

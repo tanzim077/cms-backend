@@ -1,9 +1,21 @@
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                  Int     @id @default(autoincrement())
+  name                String
+  email               String  @unique
+  password            String
+  image               String?
+  address             String?
+  phone               String?
+  is_verified         Boolean @default(false)
+  is_blocked          Boolean @default(false)
+  nid_no              String?
+  verication_document String?
+  is_deleted          Boolean @default(false)
+  is_active           Boolean @default(true)
 
-  Auth Auth[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  Auth                     Auth[]
+  UserVerificationDocument UserVerificationDocument?
 }

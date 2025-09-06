@@ -1,5 +1,6 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiService } from './api.service';
+import { RegistrationDto } from '@app/common/dtos';
 
 @Controller({
   version: '1',
@@ -9,11 +10,15 @@ export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 
   // ------------Auth------------------
-  @Post()
-  registration() {}
+  @Post('registration')
+  async registration(@Body() registrationDto: RegistrationDto) {
+    return await this.apiService.registration(registrationDto);
+  }
 
-  @Post()
-  login() {}
+  @Get()
+  login() {
+    return 'login';
+  }
 
   @Post()
   forgetPassword() {}
@@ -74,7 +79,6 @@ export class ApiController {
 
   @Post()
   removePermissionFromUser() {}
-
 
   // -------------------------------------------
   // ----------------Payment--------------------

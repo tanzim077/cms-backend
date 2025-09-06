@@ -7,9 +7,7 @@ model Permission {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // back relation for "allowed"
-  rolesAllowed Role[] @relation("AllowedPermissions")
-
-  // back relation for "restricted"
-  rolesRestricted Role[] @relation("RestrictedPermissions")
+  // Relations back to join tables
+  allowedRoles    RoleAllowedPermission[]
+  restrictedRoles RoleRestrictedPermission[]
 }

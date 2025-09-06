@@ -1,0 +1,9 @@
+model RoleAllowedPermission {
+  roleId       Int
+  permissionId Int
+  role         Role       @relation(fields: [roleId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  assignedAt   DateTime   @default(now())
+
+  @@id([roleId, permissionId])
+}

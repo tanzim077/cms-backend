@@ -5,11 +5,9 @@ model Role {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // allowed permissions
-  allowedPermissions  Permission[] @relation("AllowedPermissions")
-  allowedPermissionId Int[]
+  // Allowed permissions via join table
+  allowedPermissions RoleAllowedPermission[]
 
-  // restricted permissions
-  restrictedPermissions  Permission[] @relation("RestrictedPermissions")
-  restrictedPermissionId Int[]
+  // Restricted permissions via join table
+  restrictedPermissions RoleRestrictedPermission[]
 }

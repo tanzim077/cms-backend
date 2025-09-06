@@ -1,0 +1,19 @@
+model Subscription {
+  id                   Int      @id @default(autoincrement())
+  title                String   @unique
+  details              String
+  pricing              Float
+  pricingType          String // e.g., "monthly", "yearly"
+  terms_and_conditions String?
+  is_active            Boolean  @default(true)
+  is_deleted           Boolean  @default(false)
+  is_trial             Boolean  @default(false)
+  trial_period_days    Int? // Number of days for the trial period, if applicable
+  is_monthly_renewal   Boolean  @default(true) // Indicates if the subscription renews monthly
+  is_yearly_renewal    Boolean  @default(false) // Indicates if the subscription
+  currency             String   @default("USD") // Currency code, e.g., "USD", "EUR"
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  panelSubscriptions PanelSubscription[]
+}

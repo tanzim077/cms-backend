@@ -18,4 +18,6 @@ model User {
 
   Auth                     Auth[]
   UserVerificationDocument UserVerificationDocument?
+  PanelSubscription        PanelSubscription[]
+  SubscriptionPayment      SubscriptionPayment[]
 }

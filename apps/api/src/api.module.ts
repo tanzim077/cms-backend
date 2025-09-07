@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { DatabaseModule } from '@app/database';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { APP_FILTER } from '@nestjs/core';
-import { AllExceptionsFilter } from './all-exceptions.filter';
+import { AllExceptionsFilter } from '@app/common';
 
 @Module({
   imports: [

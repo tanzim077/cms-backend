@@ -4,9 +4,22 @@ import { ApiService } from './api.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { DatabaseModule } from '@app/database';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './all-exceptions.filter';
 
 @Module({
   imports: [
+    ClientsModule.register([
+      {
+        name: 'AUTH_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: 'localhost',
+          port: 3001,
+        },
+      },
+    ]),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['./apps/api/.env', './.env'],
@@ -25,19 +38,10 @@ import { DatabaseModule } from '@app/database';
   controllers: [ApiController],
   providers: [
     ApiService,
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   scope: Scope.REQUEST,
-    //   useClass: LoggingInterceptor,
-    // },
-    // {
-    //   provide: APP_PIPE,
-    //   useClass: FreezePipe,
-    // },
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: AllExceptionsFilter,
-    // },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
   ],
 })
 export class ApiModule {}

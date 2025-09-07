@@ -1,16 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { RegistrationDto } from '@app/common/dtos';
-import { DatabaseService } from '@app/database';
+import { Inject, Injectable } from '@nestjs/common';
+import { LoginDto, RegistrationDto } from '@app/common/dtos';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class ApiService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    @Inject('AUTH_SERVICE') private readonly authService: ClientProxy,
+  ) {}
 
   async registration(registrationData: RegistrationDto) {
-    // hashed password
+    return this.authService.send({ cmd: 'registration' }, registrationData);
+  }
 
-    return this.databaseService.user.create({
-      data: registrationData,
-    });
+  async login(loginData: LoginDto) {
+    return this.authService.send({ cmd: 'login' }, loginData);
   }
 }

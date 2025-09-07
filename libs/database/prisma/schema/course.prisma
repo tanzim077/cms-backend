@@ -1,18 +1,19 @@
 model Course {
-  id                Int     @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   title             String
   objectives        String
   description       String
   serial_no         Int
   logo              String
-  rating            Float   @default(0)
+  rating            Float    @default(0)
   batch             Int
   level             String
   category          String
   createdBy         Int
-  is_published      Boolean @default(false)
-  enrolled_students Int     @default(0)
-  user              User    @relation(fields: [createdBy], references: [id])
-
-  Module Module[]
+  is_published      Boolean  @default(false)
+  enrolled_students Int      @default(0)
+  user              User     @relation(fields: [createdBy], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  Module            Module[]
 }

@@ -7,6 +7,8 @@ export class ApiService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async registration(registrationData: RegistrationDto) {
+    // hashed password
+
     return this.databaseService.user.create({
       data: registrationData,
     });

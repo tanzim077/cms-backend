@@ -6,4 +6,6 @@ model Question {
   questionBank     QuestionBank   @relation(fields: [question_bank_id], references: [id])
   Answer           Answer[]
   CorrectAnswer    CorrectAnswer?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 }

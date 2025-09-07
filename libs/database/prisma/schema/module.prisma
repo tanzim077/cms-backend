@@ -14,8 +14,9 @@ model Module {
   unlocked_on_date             DateTime
   is_published                 Boolean  @default(false)
   completed_students           Int      @default(0)
-
-  courseId Int
-  Course   Course  @relation(fields: [courseId], references: [id])
-  class    Class[]
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+  courseId                     Int
+  Course                       Course   @relation(fields: [courseId], references: [id])
+  class                        Class[]
 }

@@ -1,10 +1,11 @@
 model QuestionBank {
-  id          Int     @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   objectives  String
   description String
-  is_active   Boolean @default(false)
-
-  Question Question[]
-  Quiz     Quiz?
+  is_active   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Question    Question[]
+  Quiz        Quiz?
 }

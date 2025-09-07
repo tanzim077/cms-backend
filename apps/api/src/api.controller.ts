@@ -15,34 +15,34 @@ export class ApiController {
     return await this.apiService.registration(registrationDto);
   }
 
-  @Get()
+  @Get('login')
   login() {
     return 'login';
   }
 
-  @Post()
+  @Post('forget-password')
   forgetPassword() {}
 
-  @Post()
+  @Post('verify-email')
   verifyEmail() {}
 
-  @Post()
+  @Post('send-otp')
   sendOtp() {}
 
-  @Post()
+  @Post('send-verification-email')
   sendVerificationEmail() {}
   // -------------------------------------------
   // ----------------Role-----------------------
-  @Post()
+  @Post('create-role')
   createRole() {}
 
-  @Get()
+  @Get('get-all-roles')
   getRoles() {}
 
-  @Post()
+  @Post('update-role')
   updateRole() {}
 
-  @Post()
+  @Post('delete-role')
   deleteRole() {}
 
   @Post()

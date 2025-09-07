@@ -4,4 +4,6 @@ model Answer {
   question_id   Int
   question      Question       @relation(fields: [question_id], references: [id])
   CorrectAnswer CorrectAnswer?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }

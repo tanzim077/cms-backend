@@ -1,0 +1,19 @@
+model Class {
+  id                          Int      @id @default(autoincrement())
+  title                       String
+  objectives                  String
+  description                 String
+  content                     String
+  rating                      Float    @default(0)
+  batch                       Int
+  level                       String
+  category                    String
+  is_locked_on_date           Boolean  @default(false)
+  is_locked_on_previous_class Boolean  @default(false)
+  unlocked_on_date            DateTime
+  is_published                Boolean  @default(false)
+  completed_students          Int      @default(0)
+
+  module_id Int
+  Module    Module @relation(fields: [module_id], references: [id])
+}

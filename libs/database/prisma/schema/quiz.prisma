@@ -1,0 +1,8 @@
+model Quiz {
+  id                           Int          @id @default(autoincrement())
+  title                        String
+  description                  String?
+  is_random_from_question_bank Boolean      @default(false)
+  question_bank_id             Int          @unique
+  questionBank                 QuestionBank @relation(fields: [question_bank_id], references: [id])
+}

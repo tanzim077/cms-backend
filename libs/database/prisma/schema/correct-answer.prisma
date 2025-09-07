@@ -1,0 +1,7 @@
+model CorrectAnswer {
+  id          Int      @id @default(autoincrement())
+  question_id Int      @unique
+  answer_id   Int      @unique
+  question    Question @relation(fields: [question_id], references: [id])
+  answer      Answer   @relation(fields: [answer_id], references: [id])
+}

@@ -1,0 +1,10 @@
+model CourseConfiguration {
+  id            Int     @id @default(autoincrement())
+  support_email String?
+  support_phone String?
+  course_domain String
+  is_verified   Boolean @default(false)
+  database_url  String
+  user          User    @relation(fields: [user_id], references: [id])
+  user_id       Int
+}

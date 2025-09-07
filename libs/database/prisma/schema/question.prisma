@@ -1,0 +1,9 @@
+model Question {
+  id               Int            @id @default(autoincrement())
+  question_text    String
+  question_type    String
+  question_bank_id Int
+  questionBank     QuestionBank   @relation(fields: [question_bank_id], references: [id])
+  Answer           Answer[]
+  CorrectAnswer    CorrectAnswer?
+}

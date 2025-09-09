@@ -7,23 +7,41 @@ import { DatabaseModule } from '@app/database';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from '@app/common';
+import { JwtStrategy } from './jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: 'AUTH_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: 'localhost',
-          port: 3001,
-        },
-      },
-    ]),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['./apps/api/.env', './.env'],
     }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    ClientsModule.registerAsync([
+      {
+        name: 'AUTH_SERVICE',
+        imports: [ConfigModule],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('AUTH_HOST'),
+            port: +configService.get('AUTH_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+      {
+        name: 'USERS_SERVICE',
+        imports: [ConfigModule],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('USERS_HOST'),
+            port: +configService.get('USERS_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -38,6 +56,7 @@ import { AllExceptionsFilter } from '@app/common';
   controllers: [ApiController],
   providers: [
     ApiService,
+    JwtStrategy,
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,

@@ -15,6 +15,7 @@
     "start:dev": "nest start --watch api",
     "dev-auth": "nest start --watch auth",
     "dev-api": "nest start --watch api",
+    "dev-user": "nest start --watch user",
     "dev-course": "nest start --watch course",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/cms-backend/main",

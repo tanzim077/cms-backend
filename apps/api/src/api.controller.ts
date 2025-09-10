@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { RegistrationDto, UpdateUserDto, UserPayload } from '@app/common/dtos';
 import { LoginDto } from '@app/common/dtos/auth/login.dto';
@@ -31,13 +24,18 @@ export class ApiController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
-  getProfile(@CurrentUser() user: UserPayload) { // Use CurrentUser decorator
+  getProfile(@CurrentUser() user: UserPayload) {
+    // Use CurrentUser decorator
     return user;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch('profile')
-  updateProfile(@CurrentUser() user: UserPayload, @Body() updateUserDto: UpdateUserDto) { // Use CurrentUser decorator
+  updateProfile(
+    @CurrentUser() user: UserPayload,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    // Use CurrentUser decorator
     return this.apiService.updateProfile(user.id, updateUserDto);
   }
 }

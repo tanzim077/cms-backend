@@ -10,4 +10,6 @@ model Role {
 
   // Restricted permissions via join table
   restrictedPermissions RoleRestrictedPermission[]
+
+  userRoles UserRole[]
 }

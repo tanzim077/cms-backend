@@ -22,4 +22,6 @@ model User {
   Course                   Course[]
   PanelSubscription        PanelSubscription[]
   SubscriptionPayment      SubscriptionPayment[]
+
+  userRoles UserRole[]
 }

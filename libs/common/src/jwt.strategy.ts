@@ -3,13 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-
-// Define an interface for the JWT payload
-interface JwtPayload {
-  sub: string; // Subject (usually user ID)
-  email: string;
-  // Add other properties as needed
-}
+import { UserPayload } from '@app/common/dtos'; // Import UserPayload
 
 // Get the absolute path to the project root directory
 const projectRoot = process.cwd();
@@ -54,8 +48,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  // Change payload type to JwtPayload and remove async as it's not needed
-  validate(payload: JwtPayload) {
-    return { id: payload.sub, email: payload.email };
+  // Change payload type to UserPayload and convert id to number
+  validate(payload: { sub: string; email: string }): UserPayload {
+    return { id: parseInt(payload.sub, 10), email: payload.email };
   }
 }

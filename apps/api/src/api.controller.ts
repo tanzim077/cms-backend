@@ -1,8 +1,16 @@
-import { Body, Controller, Get, Patch, Post, Request, UseGuards, } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiService } from './api.service';
-import { RegistrationDto, UpdateUserDto } from '@app/common/dtos';
+import { RegistrationDto, UpdateUserDto, UserPayload } from '@app/common/dtos';
 import { LoginDto } from '@app/common/dtos/auth/login.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { CurrentUser } from '@app/common/decorators'; // Import CurrentUser decorator
 
 @Controller({
   version: '1',
@@ -23,13 +31,13 @@ export class ApiController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  getProfile(@CurrentUser() user: UserPayload) { // Use CurrentUser decorator
+    return user;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch('profile')
-  updateProfile(@Request() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.apiService.updateProfile(req.user.id, updateUserDto);
+  updateProfile(@CurrentUser() user: UserPayload, @Body() updateUserDto: UpdateUserDto) { // Use CurrentUser decorator
+    return this.apiService.updateProfile(user.id, updateUserDto);
   }
 }

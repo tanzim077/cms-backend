@@ -6,7 +6,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from '@app/common'; // Import JwtStrategy from common library
+import { JwtStrategy } from '@app/common';
+import { RoleController } from './role.controller';
+import { PermissionController } from './permission.controller';
+import { RoleService } from './role.service';
+import { PermissionService } from './permission.service';
 
 @Module({
   imports: [
@@ -14,7 +18,7 @@ import { JwtStrategy } from '@app/common'; // Import JwtStrategy from common lib
       isGlobal: true,
       envFilePath: ['./apps/user/.env', './.env'],
     }),
-    PassportModule.register({ defaultStrategy: 'jwt' }), // Add PassportModule
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     DatabaseModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -26,7 +30,7 @@ import { JwtStrategy } from '@app/common'; // Import JwtStrategy from common lib
     }),
     ScheduleModule.forRoot(),
   ],
-  controllers: [UserController],
-  providers: [UserService, JwtStrategy], // Add JwtStrategy to providers
+  controllers: [UserController, RoleController, PermissionController],
+  providers: [UserService, JwtStrategy, RoleService, PermissionService],
 })
 export class UserModule {}

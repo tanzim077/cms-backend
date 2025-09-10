@@ -1,9 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 import { UserService } from './user.service';
-import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
-import { UpdateUserDto } from '@app/common/dtos';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import {
+  UpdateUserDto,
+  AssignRoleDto,
+  AssignPermissionToRoleDto,
+} from '@app/common/dtos';
 import { Command } from '@app/common/enums';
-import { User } from '@prisma/client'; // Import User type
+import { RpcException } from '@nestjs/microservices';
+import { User } from '@prisma/client';
 
 @Controller()
 export class UserController {
@@ -18,14 +23,40 @@ export class UserController {
   async updateUser(
     @Payload() data: { id: number; updateUserDto: UpdateUserDto },
   ): Promise<Omit<User, 'password'>> {
-    // Re-added explicit return type
     try {
       return await this.userService.updateUser(data.id, data.updateUserDto);
     } catch (error) {
       if (error instanceof RpcException) {
-        throw error as RpcException; // Explicitly cast to RpcException
+        throw error;
       }
-      // For any other type of error, wrap it in a new RpcException
+      throw new RpcException('An unexpected error occurred');
+    }
+  }
+
+  @MessagePattern({ cmd: Command.ASSIGN_ROLE_TO_USER })
+  async assignRoleToUser(@Payload() assignRoleDto: AssignRoleDto) {
+    try {
+      return await this.userService.assignRoleToUser(assignRoleDto);
+    } catch (error) {
+      if (error instanceof RpcException) {
+        throw error;
+      }
+      throw new RpcException('An unexpected error occurred');
+    }
+  }
+
+  @MessagePattern({ cmd: Command.ASSIGN_PERMISSION_TO_ROLE })
+  async assignPermissionToRole(
+    @Payload() assignPermissionToRoleDto: AssignPermissionToRoleDto,
+  ) {
+    try {
+      return await this.userService.assignPermissionToRole(
+        assignPermissionToRoleDto,
+      );
+    } catch (error) {
+      if (error instanceof RpcException) {
+        throw error;
+      }
       throw new RpcException('An unexpected error occurred');
     }
   }

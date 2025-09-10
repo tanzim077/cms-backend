@@ -6,8 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "prisma": {
-    "schema": "./libs/database/prisma",
-    "seed": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} libs/database/prisma/seed.ts"
+    "schema": "./libs/database/prisma"
   },
   "scripts": {
     "build": "nest build",

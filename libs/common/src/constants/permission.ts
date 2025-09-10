@@ -48,12 +48,12 @@ export const PERMISSIONS = {
 } as const;
 
 export const ROLE_LEVELS = {
-  ADMIN: 'admin',
-  MODERATOR: 'moderator',
-  INSTRUCTOR: 'instructor',
-  STUDENT: 'student',
-  USER: 'user',
-  VIEWER: 'viewer',
+  ADMIN: 'ADMIN',
+  MODERATOR: 'MODERATOR',
+  INSTRUCTOR: 'INSTRUCTOR',
+  STUDENT: 'STUDENT',
+  USER: 'USER',
+  VIEWER: 'VIEWER',
 } as const;
 
 export const DEFAULT_PERMISSIONS = {

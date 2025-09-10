@@ -1,6 +1,6 @@
 model Role {
   id          Int      @id @default(autoincrement())
-  name        String   @unique
+  name        RoleEnum @unique
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -12,4 +12,13 @@ model Role {
   restrictedPermissions RoleRestrictedPermission[]
 
   userRoles UserRole[]
+}
+
+enum RoleEnum {
+  ADMIN
+  MODERATOR
+  INSTRUCTOR
+  STUDENT
+  USER
+  VIEWER
 }

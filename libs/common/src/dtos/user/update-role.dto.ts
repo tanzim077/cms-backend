@@ -1,7 +1,14 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Role } from '@app/common/enums';
 
 export class UpdateRoleDto {
-  @IsString()
+  @IsEnum(Role)
   @IsOptional()
-  name?: string;
+  @IsNotEmpty()
+  name?: Role;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  description?: string;
 }

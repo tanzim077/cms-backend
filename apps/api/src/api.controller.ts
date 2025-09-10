@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, } from '@nestjs/common';
 import { ApiService } from './api.service';
 import {
   AssignPermissionToRoleDto,
@@ -61,10 +52,10 @@ export class ApiController {
   }
 
   // Roles
-  @UseGuards(
-    AuthGuard('jwt'),
-    // PermissionsGuard
-  )
+  // @UseGuards(
+  //   AuthGuard('jwt'),
+  // PermissionsGuard
+  // )
   // @RequiredPermissions(PERMISSION.ROLE_CREATE)
   @Post('roles')
   createRole(@Body() createRoleDto: CreateRoleDto) {

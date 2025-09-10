@@ -24,6 +24,8 @@ async function bootstrap() {
 
   // Start all microservices and log that the service is running
   await app.startAllMicroservices();
-  console.log(`Auth microservice is listening on host ${host} and port ${port}`);
+  console.log(
+    `Auth microservice is listening on host ${host} and port ${port}`,
+  );
 }
 bootstrap();

@@ -10,9 +10,13 @@ export class RoleService {
 
   async create(createRoleDto: CreateRoleDto) {
     try {
-      return await this.databaseService.role.create({
+      const role  = await this.databaseService.role.create({
         data: createRoleDto,
       });
+
+
+      return role;
+
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&

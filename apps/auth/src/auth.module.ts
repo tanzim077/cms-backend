@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthCleanupService } from './auth.cleanup.service';
 import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from '@app/common'; // Import JwtStrategy from common library
 
 @Module({
   imports: [
@@ -26,6 +27,6 @@ import { PassportModule } from '@nestjs/passport';
     ScheduleModule.forRoot(),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthCleanupService],
+  providers: [AuthService, AuthCleanupService, JwtStrategy], // Add JwtStrategy to providers
 })
 export class AuthModule {}

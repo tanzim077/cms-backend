@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "prisma": {
-    "schema": "./libs/database/prisma"
+    "schema": "./libs/database/prisma",
+    "seed": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} libs/database/prisma/seed.ts"
   },
   "scripts": {
     "build": "nest build",
@@ -23,6 +24,7 @@
     "prisma:generate": "prisma generate --schema=./libs/database/prisma/",
     "prisma:migrate": "prisma migrate dev --schema=./libs/database/prisma/",
     "prisma:reset": "prisma migrate reset --schema=./libs/database/prisma/",
+    "prisma:seed": "npx prisma db seed",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

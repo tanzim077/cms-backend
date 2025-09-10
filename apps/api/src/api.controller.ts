@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiService } from './api.service';
 import {
   AssignPermissionToRoleDto,
@@ -52,8 +61,11 @@ export class ApiController {
   }
 
   // Roles
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.ROLE_CREATE)
+  @UseGuards(
+    AuthGuard('jwt'),
+    // PermissionsGuard
+  )
+  // @RequiredPermissions(PERMISSION.ROLE_CREATE)
   @Post('roles')
   createRole(@Body() createRoleDto: CreateRoleDto) {
     return this.apiService.createRole(createRoleDto);
@@ -88,13 +100,11 @@ export class ApiController {
   }
 
   // Permissions
-  @UseGuards(
-    AuthGuard('jwt'),
-    // PermissionsGuard
-  )
-  // @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
   @Post('permissions')
   createPermission(@Body() createPermissionDto: CreatePermissionDto) {
+    console.log('hit');
     return this.apiService.createPermission(createPermissionDto);
   }
 

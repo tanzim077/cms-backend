@@ -63,6 +63,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ),
     );
     const uniquePermissions = [...new Set(permissions)];
+    console.log('🚀 ~ validate ~ uniquePermissions: ', uniquePermissions);
 
     return {
       id: user.id,

@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Patch,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Request, UseGuards, } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { RegistrationDto, UpdateUserDto } from '@app/common/dtos';
 import { LoginDto } from '@app/common/dtos/auth/login.dto';
@@ -38,7 +30,6 @@ export class ApiController {
   @UseGuards(AuthGuard('jwt'))
   @Patch('profile')
   updateProfile(@Request() req, @Body() updateUserDto: UpdateUserDto) {
-    console.log('hit');
     return this.apiService.updateProfile(req.user.id, updateUserDto);
   }
 }

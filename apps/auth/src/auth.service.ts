@@ -3,7 +3,7 @@ import { DatabaseService } from '@app/database';
 import { LoginDto } from '@app/common/dtos/auth/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { RegistrationDto, UpdateUserDto } from '@app/common/dtos';
+import { RegistrationDto } from '@app/common/dtos';
 import { Prisma } from '@prisma/client';
 import { RpcException } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
@@ -134,43 +134,6 @@ export class AuthService {
         return value * 24 * 60 * 60 * 1000; // days to milliseconds
       default:
         return 0; // Should not happen with valid expiresIn values
-    }
-  }
-
-  async updateUser(id: number, updateUserDto: UpdateUserDto) {
-    if (updateUserDto.password) {
-      const salt = await bcrypt.genSalt();
-      updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
-    }
-
-    try {
-      const user = await this.databaseService.user.update({
-        where: { id },
-        data: updateUserDto,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
-      return result;
-    } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        throw new RpcException({
-          status: 409,
-          message: 'Email already exists',
-        });
-      }
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2025'
-      ) {
-        throw new RpcException({
-          status: 404,
-          message: 'User not found',
-        });
-      }
-      throw error;
     }
   }
 }

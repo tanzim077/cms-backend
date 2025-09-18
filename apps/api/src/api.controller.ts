@@ -36,13 +36,11 @@ export class ApiController {
 
   @Post('registration')
   registration(@Body() registrationDto: RegistrationDto) {
-  console.log('🚀 ~ registration ~ registrationDto: ', registrationDto);
     return this.apiService.registration(registrationDto);
   }
 
   @Post('login')
   login(@Body() loginDto: LoginDto) {
-    console.log('🚀 ~ login ~ loginDto: ', loginDto);
     return this.apiService.login(loginDto);
   }
 
@@ -70,6 +68,7 @@ export class ApiController {
   // @RequiredPermissions(PERMISSION.ROLE_CREATE)
   @Post('roles')
   createRole(@Body() createRoleDto: CreateRoleDto) {
+  console.log('🚀 ~ createRole ~ createRoleDto: ', createRoleDto);
     return this.apiService.createRole(createRoleDto);
   }
 

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '@app/database';
 import {
-  UpdateUserDto,
-  AssignRoleDto,
   AssignPermissionToRoleDto,
+  AssignRoleDto,
+  UpdateUserDto,
 } from '@app/common/dtos';
 import * as bcrypt from 'bcrypt';
 import { Prisma, User } from '@prisma/client';
@@ -60,11 +60,15 @@ export class UserService {
   async assignRoleToUser(assignRoleDto: AssignRoleDto) {
     const { userId, roleId } = assignRoleDto;
     // Check if user and role exist
-    const user = await this.databaseService.user.findUnique({ where: { id: userId } });
+    const user = await this.databaseService.user.findUnique({
+      where: { id: userId },
+    });
     if (!user) {
       throw new RpcException({ status: 404, message: 'User not found' });
     }
-    const role = await this.databaseService.role.findUnique({ where: { id: roleId } });
+    const role = await this.databaseService.role.findUnique({
+      where: { id: roleId },
+    });
     if (!role) {
       throw new RpcException({ status: 404, message: 'Role not found' });
     }
@@ -77,21 +81,33 @@ export class UserService {
         },
       });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        throw new RpcException({ status: 409, message: 'User already has this role' });
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new RpcException({
+          status: 409,
+          message: 'User already has this role',
+        });
       }
       throw error;
     }
   }
 
-  async assignPermissionToRole(assignPermissionToRoleDto: AssignPermissionToRoleDto) {
+  async assignPermissionToRole(
+    assignPermissionToRoleDto: AssignPermissionToRoleDto,
+  ) {
     const { roleId, permissionId } = assignPermissionToRoleDto;
     // Check if role and permission exist
-    const role = await this.databaseService.role.findUnique({ where: { id: roleId } });
+    const role = await this.databaseService.role.findUnique({
+      where: { id: roleId },
+    });
     if (!role) {
       throw new RpcException({ status: 404, message: 'Role not found' });
     }
-    const permission = await this.databaseService.permission.findUnique({ where: { id: permissionId } });
+    const permission = await this.databaseService.permission.findUnique({
+      where: { id: permissionId },
+    });
     if (!permission) {
       throw new RpcException({ status: 404, message: 'Permission not found' });
     }
@@ -104,8 +120,14 @@ export class UserService {
         },
       });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        throw new RpcException({ status: 409, message: 'Role already has this permission' });
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new RpcException({
+          status: 409,
+          message: 'Role already has this permission',
+        });
       }
       throw error;
     }

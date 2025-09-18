@@ -19,8 +19,8 @@ import { RequiredPermissions } from '@app/common/decorators/permission.decorator
 import { PERMISSION } from '@app/common/enums'; // Direct import
 
 @Controller({
-  version: '1',
   path: 'api',
+  version: '1',
 })
 export class ApiController {
   constructor(private readonly apiService: ApiService) {}
@@ -62,7 +62,10 @@ export class ApiController {
     return this.apiService.createRole(createRoleDto);
   }
 
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @UseGuards(
+    AuthGuard('jwt'),
+    // PermissionsGuard
+  )
   @RequiredPermissions(PERMISSION.ROLE_VIEW)
   @Get('roles')
   findAllRoles() {
@@ -91,12 +94,19 @@ export class ApiController {
   }
 
   // Permissions
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
+  @UseGuards(AuthGuard('jwt'),
+    // PermissionsGuard
+  )
+  // @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
   @Post('permissions')
   createPermission(@Body() createPermissionDto: CreatePermissionDto) {
     console.log('hit');
     return this.apiService.createPermission(createPermissionDto);
+  }
+
+  @Post('bulk-permissions')
+  createBulkPermission(@Body() createPermissionDto: any) {
+    return this.apiService.createBulkPermission(createPermissionDto);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)

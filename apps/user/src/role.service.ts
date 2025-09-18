@@ -9,14 +9,23 @@ export class RoleService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async create(createRoleDto: CreateRoleDto) {
+    const { permissions, ...roleData } = createRoleDto;
     try {
-      const role  = await this.databaseService.role.create({
-        data: createRoleDto,
+      return await this.databaseService.role.create({
+        data: {
+          ...roleData,
+          ...(permissions &&
+            permissions.length > 0 && {
+              allowedPermissions: {
+                create: permissions.map((id) => ({
+                  permission: {
+                    connect: { id },
+                  },
+                })),
+              },
+            }),
+        },
       });
-
-
-      return role;
-
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&

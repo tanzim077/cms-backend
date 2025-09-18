@@ -1,12 +1,11 @@
-model RoleAllowedPermission {
-  id           Int
-  roleId       Int
+model UserRestrictedPermission {
+  userId       Int
   permissionId Int
-  role         Role       @relation(fields: [roleId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
   permission   Permission @relation(fields: [permissionId], references: [id])
   assignedAt   DateTime   @default(now())
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
-  @@id([roleId, permissionId])
+  @@id([userId, permissionId])
 }

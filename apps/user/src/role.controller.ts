@@ -15,6 +15,7 @@ export class RoleController {
 
   @MessagePattern({ cmd: Command.FIND_ALL_ROLES })
   findAll() {
+    console.log("gg");
     return this.roleService.findAll();
   }
 

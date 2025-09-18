@@ -13,6 +13,11 @@ export class PermissionController {
     return this.permissionService.create(createPermissionDto);
   }
 
+  @MessagePattern({ cmd: Command.CREATE_BULK_PERMISSION })
+  createBulk(@Payload() createPermissionDto: any) {
+    return this.permissionService.createBulk(createPermissionDto);
+  }
+
   @MessagePattern({ cmd: Command.FIND_ALL_PERMISSIONS })
   findAll() {
     return this.permissionService.findAll();

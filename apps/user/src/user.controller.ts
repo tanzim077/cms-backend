@@ -33,31 +33,31 @@ export class UserController {
     }
   }
 
-  @MessagePattern({ cmd: Command.ASSIGN_ROLE_TO_USER })
-  async assignRoleToUser(@Payload() assignRoleDto: AssignRoleDto) {
-    try {
-      return await this.userService.assignRoleToUser(assignRoleDto);
-    } catch (error) {
-      if (error instanceof RpcException) {
-        throw error;
-      }
-      throw new RpcException('An unexpected error occurred');
-    }
-  }
+  // @MessagePattern({ cmd: Command.ASSIGN_ROLE_TO_USER })
+  // async assignRoleToUser(@Payload() assignRoleDto: AssignRoleDto) {
+  //   try {
+  //     return await this.userService.assignRoleToUser(assignRoleDto);
+  //   } catch (error) {
+  //     if (error instanceof RpcException) {
+  //       throw error;
+  //     }
+  //     throw new RpcException('An unexpected error occurred');
+  //   }
+  // }
 
-  @MessagePattern({ cmd: Command.ASSIGN_PERMISSION_TO_ROLE })
-  async assignPermissionToRole(
-    @Payload() assignPermissionToRoleDto: AssignPermissionToRoleDto,
-  ) {
-    try {
-      return await this.userService.assignPermissionToRole(
-        assignPermissionToRoleDto,
-      );
-    } catch (error) {
-      if (error instanceof RpcException) {
-        throw error;
-      }
-      throw new RpcException('An unexpected error occurred');
-    }
-  }
+  // @MessagePattern({ cmd: Command.ASSIGN_PERMISSION_TO_ROLE })
+  // async assignPermissionToRole(
+  //   @Payload() assignPermissionToRoleDto: AssignPermissionToRoleDto,
+  // ) {
+  //   try {
+  //     return await this.userService.assignPermissionToRole(
+  //       assignPermissionToRoleDto,
+  //     );
+  //   } catch (error) {
+  //     if (error instanceof RpcException) {
+  //       throw error;
+  //     }
+  //     throw new RpcException('An unexpected error occurred');
+  //   }
+  // }
 }

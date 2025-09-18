@@ -8,6 +8,8 @@ model Permission {
   updatedAt   DateTime @updatedAt
 
   // Relations back to join tables
-  allowedRoles    RoleAllowedPermission[]
-  restrictedRoles RoleRestrictedPermission[]
+  allowedRoles            RoleAllowedPermission[]
+  restrictedRoles         RoleRestrictedPermission[]
+  userAllowedPermissions  UserAllowedPermission[]
+  userRestrictedPermissions UserRestrictedPermission[]
 }

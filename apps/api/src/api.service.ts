@@ -70,6 +70,13 @@ export class ApiService {
     );
   }
 
+  createBulkPermission(createPermissionDto: any) {
+    return this.usersService.send(
+      { cmd: Command.CREATE_BULK_PERMISSION },
+      createPermissionDto,
+    );
+  }
+
   findAllPermissions() {
     return this.usersService.send({ cmd: Command.FIND_ALL_PERMISSIONS }, {});
   }

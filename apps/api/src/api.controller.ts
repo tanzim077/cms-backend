@@ -28,19 +28,21 @@ import { RequiredPermissions } from '@app/common/decorators/permission.decorator
 import { PERMISSION } from '@app/common/enums'; // Direct import
 
 @Controller({
-  version: '1',
   path: 'api',
+  version: '1',
 })
 export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 
   @Post('registration')
   registration(@Body() registrationDto: RegistrationDto) {
+  console.log('🚀 ~ registration ~ registrationDto: ', registrationDto);
     return this.apiService.registration(registrationDto);
   }
 
   @Post('login')
   login(@Body() loginDto: LoginDto) {
+    console.log('🚀 ~ login ~ loginDto: ', loginDto);
     return this.apiService.login(loginDto);
   }
 

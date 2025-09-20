@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '@app/database';
-import { UpdateUserDto } from '@app/common/dtos';
-import { AssignRoleDto, UpdateUserDto } from '@app/common/dtos';
 import * as bcrypt from 'bcrypt';
-import { Prisma, User, UserRole } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
@@ -16,7 +14,7 @@ export class UserService {
 
   async updateUser(
     id: number,
-    updateUserDto: UpdateUserDto,
+    updateUserDto: Prisma.UserUpdateInput,
   ): Promise<Omit<User, 'password'>> {
     if (updateUserDto.password) {
       const salt = await bcrypt.genSalt();

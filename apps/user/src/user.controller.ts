@@ -1,9 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
-import { AssignRoleDto, UpdateUserDto } from '@app/common/dtos';
 import { Command } from '@app/common/enums';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 @Controller()
 export class UserController {
@@ -16,7 +15,7 @@ export class UserController {
 
   @MessagePattern({ cmd: Command.UPDATE_USER })
   async updateUser(
-    @Payload() data: { id: number; updateUserDto: UpdateUserDto },
+    @Payload() data: { id: number; updateUserDto: Prisma.UserUpdateInput },
   ): Promise<Omit<User, 'password'>> {
     try {
       return await this.userService.updateUser(data.id, data.updateUserDto);
@@ -55,15 +54,15 @@ export class UserController {
   //     throw new RpcException('An unexpected error occurred');
   //   }
   // }
-  @MessagePattern({ cmd: Command.ASSIGN_ROLE_TO_USER })
-  async assignRoleToUser(@Payload() assignRoleDto: AssignRoleDto) {
-    try {
-      return await this.userService.assignRoleToUser(assignRoleDto);
-    } catch (error) {
-      if (error instanceof RpcException) {
-        throw error;
-      }
-      throw new RpcException('An unexpected error occurred');
-    }
-  }
+  // @MessagePattern({ cmd: Command.ASSIGN_ROLE_TO_USER })
+  // async assignRoleToUser(@Payload() assignRoleDto: AssignRoleDto) {
+  //   try {
+  //     return await this.userService.assignRoleToUser(assignRoleDto);
+  //   } catch (error) {
+  //     if (error instanceof RpcException) {
+  //       throw error;
+  //     }
+  //     throw new RpcException('An unexpected error occurred');
+  //   }
+  // }
 }

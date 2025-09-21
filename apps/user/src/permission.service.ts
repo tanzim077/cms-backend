@@ -59,17 +59,17 @@ export class PermissionService {
     const roles = await this.databaseService.role.findMany();
     const permissions = await this.databaseService.permission.findMany();
 
-    for (const role of roles) {
-      for (const permission of permissions) {
-        await this.databaseService.roleAllowedPermission.create({
-          data: {
-            roleId: role.id,
-            permissionId: permission.id,
-          },
-        });
-
-        }
-      }
+    // for (const role of roles) {
+    //   for (const permission of permissions) {
+    //     await this.databaseService.roleAllowedPermission.create({
+    //       data: {
+    //         roleId: role.id,
+    //         permissionId: permission.id,
+    //       },
+    //     });
+    //
+    //     }
+    //   }
     }
 
 

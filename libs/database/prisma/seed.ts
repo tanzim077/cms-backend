@@ -1,172 +1,88 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, RoleEnum } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create roles
+  // --- Permissions ---
+  const permissions = await prisma.permission.createMany({
+    data: [
+      { code: 'user:create', description: 'user:create' },
+      { code: 'user:update', description: 'user:update' },
+      { code: 'user:delete', description: 'user:delete' },
+      { code: 'user:view', description: 'user:view' },
+      { code: 'role:create', description: 'role:create' },
+      { code: 'role:update', description: 'role:update' },
+      { code: 'role:delete', description: 'role:delete' },
+      { code: 'role:view', description: 'role:view' },
+      { code: 'role:assign', description: 'role:assign' },
+      { code: 'permission:view', description: 'permission:view' },
+      { code: 'permission:assign', description: 'permission:assign' },
+    ],
+    skipDuplicates: true,
+  });
+
+  // --- Roles ---
   const adminRole = await prisma.role.upsert({
-    where: { name: 'Admin' },
+    where: { name: RoleEnum.ADMIN },
     update: {},
-    create: {
-      name: 'Admin',
-      description: 'Administrator with full access',
-    },
+    create: { name: RoleEnum.ADMIN },
   });
 
   const userRole = await prisma.role.upsert({
-    where: { name: 'User' },
+    where: { name: RoleEnum.USER },
     update: {},
-    create: {
-      name: 'User',
-      description: 'Standard user with limited access',
-    },
+    create: { name: RoleEnum.USER },
   });
 
-  // Create permissions
-  const permissions = [
-    // Admin permissions
-    {
-      title: 'Create User',
-      code: 'admin.user.create',
-      description: 'Allows creating a new user.',
-    },
-    {
-      title: 'Read User',
-      code: 'admin.user.read',
-      description: 'Allows viewing user details.',
-    },
-    {
-      title: 'Update User',
-      code: 'admin.user.update',
-      description: 'Allows editing user details.',
-    },
-    {
-      title: 'Delete User',
-      code: 'admin.user.delete',
-      description: 'Allows deleting a user.',
-    },
-    {
-      title: 'Create Role',
-      code: 'admin.role.create',
-      description: 'Allows creating a new role.',
-    },
-    {
-      title: 'Read Role',
-      code: 'admin.role.read',
-      description: 'Allows viewing role details.',
-    },
-    {
-      title: 'Update Role',
-      code: 'admin.role.update',
-      description: 'Allows editing role details.',
-    },
-    {
-      title: 'Delete Role',
-      code: 'admin.role.delete',
-      description: 'Allows deleting a role.',
-    },
-    {
-      title: 'Create Course',
-      code: 'admin.course.create',
-      description: 'Allows creating a new course.',
-    },
-    {
-      title: 'Read Course',
-      code: 'admin.course.read',
-      description: 'Allows viewing course details.',
-    },
-    {
-      title: 'Update Course',
-      code: 'admin.course.update',
-      description: 'Allows editing course details.',
-    },
-    {
-      title: 'Delete Course',
-      code: 'admin.course.delete',
-      description: 'Allows deleting a course.',
-    },
-
-    // User permissions
-    {
-      title: 'Read Course',
-      code: 'user.course.read',
-      description: 'Allows viewing course details.',
-    },
-    {
-      title: 'Read Profile',
-      code: 'user.profile.read',
-      description: 'Allows viewing own profile.',
-    },
-    {
-      title: 'Update Profile',
-      code: 'user.profile.update',
-      description: 'Allows updating own profile.',
-    },
-  ];
-
-  for (const permission of permissions) {
-    await prisma.permission.upsert({
-      where: { code: permission.code },
-      update: {},
-      create: permission,
-    });
-  }
-
-  // Assign permissions to roles
-  const adminPermissions = await prisma.permission.findMany({
-    where: {
-      code: {
-        startsWith: 'admin.',
-      },
-    },
-  });
-
-  const userPermissions = await prisma.permission.findMany({
-    where: {
-      code: {
-        startsWith: 'user.',
-      },
-    },
-  });
-
-  for (const permission of adminPermissions) {
-    await prisma.roleAllowedPermission.upsert({
+  // --- Attach permissions to Admin role ---
+  const allPermissions = await prisma.permission.findMany();
+  for (const perm of allPermissions) {
+    await prisma.rolePermission.upsert({
       where: {
         roleId_permissionId: {
           roleId: adminRole.id,
-          permissionId: permission.id,
+          permissionId: perm.id,
         },
       },
       update: {},
       create: {
         roleId: adminRole.id,
-        permissionId: permission.id,
+        permissionId: perm.id,
+        allowed: true,
       },
     });
   }
 
-  for (const permission of userPermissions) {
-    await prisma.roleAllowedPermission.upsert({
-      where: {
-        roleId_permissionId: {
-          roleId: userRole.id,
-          permissionId: permission.id,
-        },
-      },
-      update: {},
-      create: {
-        roleId: userRole.id,
-        permissionId: permission.id,
-      },
-    });
-  }
+  // --- Users ---
+  // await prisma.user.upsert({
+  //   where: { email: 'admin@gmail.com' },
+  //   update: {},
+  //   create: {
+  //     email: 'admin@gmail.com',
+  //     name: 'Super Admin',
+  //     roleId: adminRole.id,
+  //   },
+  // });
+  //
+  // await prisma.user.upsert({
+  //   where: { email: 'user@example.com' },
+  //   update: {},
+  //   create: {
+  //     email: 'user@example.com',
+  //     name: 'Normal User',
+  //     roleId: userRole.id,
+  //   },
+  // });
+
+  console.log('✅ Seed data inserted successfully');
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
+  .then(async () => {
     await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
   });

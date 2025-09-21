@@ -23,7 +23,6 @@ model User {
   PanelSubscription        PanelSubscription[]
   SubscriptionPayment      SubscriptionPayment[]
 
-  userRoles               UserRole[]
-  userAllowedPermissions  UserAllowedPermission[]
-  userRestrictedPermissions UserRestrictedPermission[]
+  userRoles       UserRole[]
+  userPermissions UserPermission[]
 }

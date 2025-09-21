@@ -41,13 +41,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           include: {
             role: {
               include: {
-                allowedPermissions: {
+                RolePermission: {
                   include: {
                     permission: true,
                   },
                 },
               },
             },
+          },
+        },
+        userPermissions: {
+          // ✅ include direct user overrides too
+          include: {
+            permission: true,
           },
         },
       },
@@ -57,11 +63,27 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException(); // Throw exception instead of returning null
     }
 
-    const permissions = user.userRoles.flatMap((userRole) =>
-      userRole.role.allowedPermissions.map(
-        (allowedPermission) => allowedPermission.permission.code,
-      ),
+    const rolePermissions = user.userRoles.flatMap((userRole) =>
+      userRole.role.RolePermission.filter((rp) => rp.allowed) // ✅ only allowed=true
+        .map((rp) => rp.permission.code),
     );
+
+    // Apply user-level overrides
+    const userAllowed = user.userPermissions
+      .filter((up) => up.allowed)
+      .map((up) => up.permission.code);
+
+    const userRestricted = user.userPermissions
+      .filter((up) => !up.allowed)
+      .map((up) => up.permission.code);
+
+    // Final merge
+    let permissions = [...rolePermissions, ...userAllowed];
+
+    // Remove restricted ones
+    permissions = permissions.filter((perm) => !userRestricted.includes(perm));
+
+    // Deduplicate
     const uniquePermissions = [...new Set(permissions)];
     console.log('🚀 ~ validate ~ uniquePermissions: ', uniquePermissions);
 

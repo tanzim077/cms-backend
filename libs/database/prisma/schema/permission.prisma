@@ -1,15 +1,11 @@
 model Permission {
   id          Int      @id @default(autoincrement())
-  title       String
   description String?
   code        String   @unique
   level       Int      @default(1)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Relations back to join tables
-  allowedRoles            RoleAllowedPermission[]
-  restrictedRoles         RoleRestrictedPermission[]
-  userAllowedPermissions  UserAllowedPermission[]
-  userRestrictedPermissions UserRestrictedPermission[]
+  RolePermission RolePermission[]
+  UserPermission UserPermission[]
 }

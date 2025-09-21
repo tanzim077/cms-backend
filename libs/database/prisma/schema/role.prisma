@@ -1,17 +1,12 @@
 model Role {
   id          Int      @id @default(autoincrement())
   name        RoleEnum @unique
-  description String
+  description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Allowed permissions via join table
-  allowedPermissions RoleAllowedPermission[]
-
-  // Restricted permissions via join table
-  restrictedPermissions RoleRestrictedPermission[]
-
-  userRoles UserRole[]
+  userRoles      UserRole[]
+  RolePermission RolePermission[]
 }
 
 enum RoleEnum {

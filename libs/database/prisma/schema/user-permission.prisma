@@ -1,0 +1,13 @@
+model UserPermission {
+  userId       Int
+  permissionId Int
+  allowed      Boolean // true = allowed, false = restricted
+
+  user       User       @relation(fields: [userId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+  assignedAt DateTime   @default(now())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now()) @updatedAt
+
+  @@id([userId, permissionId])
+}

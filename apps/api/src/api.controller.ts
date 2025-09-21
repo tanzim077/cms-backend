@@ -140,6 +140,13 @@ export class ApiController {
     return this.apiService.removePermission(+id);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.PERMISSION_VIEW)
+  @Get('roles/:roleId/permissions')
+  findPermissionsByRole(@Param('roleId') roleId: number) {
+    return this.apiService.findPermissionsByRole(roleId);
+  }
+
   // Assignments
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.ROLE_ASSIGN)

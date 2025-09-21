@@ -85,6 +85,13 @@ export class ApiService {
     return this.usersService.send({ cmd: Command.FIND_ONE_PERMISSION }, id);
   }
 
+  findPermissionsByRole(roleId: number) {
+    return this.usersService.send(
+      { cmd: Command.SHOW_ROLE_PERMISSION },
+      roleId,
+    );
+  }
+
   updatePermission(id: number, updatePermissionDto: UpdatePermissionDto) {
     return this.usersService.send(
       { cmd: Command.UPDATE_PERMISSION },

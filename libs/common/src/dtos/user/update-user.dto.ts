@@ -9,7 +9,6 @@ export class UpdateUserDto {
   @IsString()
   password?: string;
 
-
   @IsOptional()
   @IsEmail()
   email?: string;
@@ -17,10 +16,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   address?: string;
-
-  @IsOptional()
-  @IsString()
-  password?: string;
 
   @IsOptional()
   @IsString()

@@ -1,4 +1,5 @@
 import { PrismaClient, RoleEnum } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -54,15 +55,26 @@ async function main() {
   }
 
   // --- Users ---
-  // await prisma.user.upsert({
-  //   where: { email: 'admin@gmail.com' },
-  //   update: {},
-  //   create: {
-  //     email: 'admin@gmail.com',
-  //     name: 'Super Admin',
-  //     roleId: adminRole.id,
-  //   },
-  // });
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash('12345', salt);
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'admin@gmail.com' },
+    update: {
+      password: hashedPassword,
+    },
+    create: {
+      email: 'admin@gmail.com',
+      name: 'Super Admin',
+      password: hashedPassword,
+    },
+  });
+
+  await prisma.userRole.create({
+    data: {
+      user_id: adminUser.id,
+      role_id: adminRole.id,
+    },
+  });
   //
   // await prisma.user.upsert({
   //   where: { email: 'user@example.com' },

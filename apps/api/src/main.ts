@@ -1,19 +1,23 @@
-import { NestFactory } from '@nestjs/core';
-import { ApiModule } from './api.module';
-import * as compression from 'compression';
-import helmet from 'helmet';
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
+import * as compression from 'compression';
+import helmet from 'helmet';
+import { ApiModule } from './api.module';
 
 async function bootstrap() {
   const logger = new Logger('Api');
   const app = await NestFactory.create(ApiModule);
+  const configService = app.get(ConfigService);
   app.connectMicroservice({
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
     options: {
-      host: '0.0.0.0',
-      port: app.get(ConfigService).get('TCP_PORT') as string,
+      urls: [configService.get<string>('RMQ_URL')],
+      queue: configService.get<string>('API_QUEUE'),
+      queueOptions: {
+        durable: false,
+      },
     },
   });
   app.enableCors();

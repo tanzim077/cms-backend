@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { JwtStrategy } from '@app/common'; // Import JwtStrategy from common library
 import { DatabaseModule } from '@app/database';
-import { JwtModule } from '@nestjs/jwt';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthCleanupService } from './auth.cleanup.service';
-import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from '@app/common'; // Import JwtStrategy from common library
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [

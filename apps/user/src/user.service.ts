@@ -17,17 +17,18 @@ export class UserService {
     id: number,
     updateUserDto: Prisma.UserUpdateInput,
   ): Promise<Omit<User, 'password'>> {
-    if (updateUserDto.password) {
+    const data: Prisma.UserUpdateInput = { ...updateUserDto };
+
+    if (updateUserDto.password && typeof updateUserDto.password === 'string') {
       const salt = await bcrypt.genSalt();
-      updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
+      data.password = await bcrypt.hash(updateUserDto.password, salt);
     }
 
     try {
       const user = await this.databaseService.user.update({
         where: { id },
-        data: updateUserDto,
+        data,
       });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     } catch (error) {

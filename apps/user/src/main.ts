@@ -6,20 +6,26 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create(UserModule);
   const configService = app.get(ConfigService);
-  const host = configService.get('USERS_HOST') as string; // Changed from USER_HOST to USERS_HOST
-  const port = +configService.get('USERS_PORT'); // Changed from USER_PORT to USERS_PORT
+  const rmqUrl = configService.get<string>('RMQ_URL');
+  const queueName = configService.get<string>('USERS_QUEUE');
+
+  if (!rmqUrl || !queueName) {
+    throw new Error('RMQ_URL or USERS_QUEUE is not defined in configuration');
+  }
+
   await app.close();
   const microservice =
     await NestFactory.createMicroservice<MicroserviceOptions>(UserModule, {
-      transport: Transport.TCP,
+      transport: Transport.RMQ,
       options: {
-        host,
-        port,
+        urls: [rmqUrl],
+        queue: queueName,
+        queueOptions: {
+          durable: false,
+        },
       },
     });
   await microservice.listen();
-  console.log(
-    `User microservice is listening on host ${host} and port ${port}`,
-  );
+  console.log(`User microservice is listening on queue ${queueName}`);
 }
 bootstrap();

@@ -1,31 +1,34 @@
-import { NestFactory } from '@nestjs/core';
-import { AuthModule } from './auth.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { AuthModule } from './auth.module';
 
 async function bootstrap() {
-  // Create a single, hybrid NestJS application
-  const app = await NestFactory.create(AuthModule);
+  const appContext = await NestFactory.createApplicationContext(AuthModule);
+  const configService = appContext.get(ConfigService);
 
-  // Get the ConfigService from the unified application context
-  const configService = app.get(ConfigService);
+  const rmqUrl = configService.get<string>('RMQ_URL');
+  const queueName = configService.get<string>('AUTH_QUEUE');
 
-  const host = configService.get<string>('AUTH_HOST');
-  const port = configService.get<number>('AUTH_PORT');
+  if (!rmqUrl || !queueName) {
+    throw new Error('RMQ_URL or AUTH_QUEUE is not defined in configuration');
+  }
 
-  // Connect the microservice transport layer to the main application
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.TCP,
-    options: {
-      host,
-      port,
-    },
-  });
+  const microservice =
+    await NestFactory.createMicroservice<MicroserviceOptions>(AuthModule, {
+      transport: Transport.RMQ,
+      options: {
+        urls: [rmqUrl],
+        queue: queueName,
+        queueOptions: {
+          durable: false,
+        },
+      },
+    });
 
-  // Start all microservices and log that the service is running
-  await app.startAllMicroservices();
+  await microservice.listen();
   console.log(
-    `Auth microservice is listening on host ${host} and port ${port}`,
+    `✅ Auth microservice is listening on queue "${queueName}" via RabbitMQ`,
   );
 }
 bootstrap();

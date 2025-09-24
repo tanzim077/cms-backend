@@ -35,6 +35,7 @@ import { Endpoint as EP } from './enums'; // Direct import
 export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 
+  // ----------- Auth ---------------
   @Post(EP.REGISTRATION)
   registration(@Body() registrationDto: RegistrationDto) {
     return this.apiService.registration(registrationDto);
@@ -45,12 +46,14 @@ export class ApiController {
     return this.apiService.login(loginDto);
   }
 
+  // ---------- User ------------------
   @UseGuards(AuthGuard('jwt'))
   @Get(EP.GET_USER_PROFILE)
   getProfile(@CurrentUser() user: UserPayload) {
     return user;
   }
 
+  // ---------- Permission ------------------
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.USER_UPDATE)
   @Patch(EP.UPDATE_USER_BY_USER_ID)
@@ -61,43 +64,6 @@ export class ApiController {
     return this.apiService.updateProfile(user.id, updateUserDto);
   }
 
-  // Roles
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.ROLE_CREATE)
-  @Post(EP.CREATE_ROLE)
-  createRole(@Body() createRoleDto: CreateRoleDto) {
-    return this.apiService.createRole(createRoleDto);
-  }
-
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.ROLE_VIEW)
-  @Get(EP.GET_ALL_ROLES)
-  findAllRoles() {
-    return this.apiService.findAllRoles();
-  }
-
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.ROLE_VIEW)
-  @Get(EP.GET_ROLE_BY_ROLE_ID)
-  findOneRole(@Param('id') id: string) {
-    return this.apiService.findOneRole(+id);
-  }
-
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.ROLE_UPDATE)
-  @Patch(EP.UPDATE_ROLE_BY_ROLE_ID)
-  updateRole(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.apiService.updateRole(+id, updateRoleDto);
-  }
-
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.ROLE_DELETE)
-  @Delete(EP.DELETE_ROLE_BY_ROLE_ID)
-  removeRole(@Param('id') id: string) {
-    return this.apiService.removeRole(+id);
-  }
-
-  // Permissions
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
   @Post(EP.CREATE_PERMISSION)
@@ -142,26 +108,62 @@ export class ApiController {
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.PERMISSION_VIEW)
-  @Get('roles/:roleId/permissions')
-  findPermissionsByRole(@Param('roleId') roleId: number) {
-    return this.apiService.findPermissionsByRole(roleId);
-  }
-
-  // Assignments
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @RequiredPermissions(PERMISSION.ROLE_ASSIGN)
-  @Post('users/assign-role')
-  assignRoleToUser(@Body() assignRoleDto: AssignRoleDto) {
-    return this.apiService.assignRoleToUser(assignRoleDto);
-  }
-
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
-  @Post('roles/assign-permission')
+  @Post(EP.ASSIGN_PERMISSION_TO_ROLE)
   assignPermissionToRole(
     @Body() assignPermissionToRoleDto: AssignPermissionToRoleDto,
   ) {
     return this.apiService.assignPermissionToRole(assignPermissionToRoleDto);
+  }
+
+  // ---------- Role ------------------
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.ROLE_VIEW)
+  @Get(EP.GET_ALL_ROLES)
+  findAllRoles() {
+    return this.apiService.findAllRoles();
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.ROLE_CREATE)
+  @Post(EP.CREATE_ROLE)
+  createRole(@Body() createRoleDto: CreateRoleDto) {
+    return this.apiService.createRole(createRoleDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.ROLE_VIEW)
+  @Get(EP.GET_ROLE_BY_ROLE_ID)
+  findOneRole(@Param('id') id: string) {
+    return this.apiService.findOneRole(+id);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.ROLE_UPDATE)
+  @Patch(EP.UPDATE_ROLE_BY_ROLE_ID)
+  updateRole(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
+    return this.apiService.updateRole(+id, updateRoleDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.ROLE_DELETE)
+  @Delete(EP.DELETE_ROLE_BY_ROLE_ID)
+  removeRole(@Param('id') id: string) {
+    return this.apiService.removeRole(+id);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.PERMISSION_VIEW)
+  @Get(EP.GET_ALL_ROLES_PERMISSION)
+  findPermissionsByRole(@Param('roleId') roleId: number) {
+    return this.apiService.findPermissionsByRole(roleId);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+  @RequiredPermissions(PERMISSION.ROLE_ASSIGN)
+  @Post(EP.ASSIGN_ROLE_TO_USER)
+  assignRoleToUser(@Body() assignRoleDto: AssignRoleDto) {
+    return this.apiService.assignRoleToUser(assignRoleDto);
   }
 }

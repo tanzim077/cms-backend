@@ -10,7 +10,7 @@ export enum Endpoint {
   //--------- ROLES ----------
   GET_ALL_ROLES = 'roles',
   GET_ROLE_BY_ROLE_ID = 'roles/:id',
-  GET_ALL_ROLES_PERMISSION = 'roles/get-permission',
+  GET_ALL_ROLES_PERMISSION = 'roles/:roleId/get-permission',
   GET_ALL_ROLE_USERS_BY_ROLE_ID = 'roles/:roleId/users',
   CREATE_ROLE = 'roles/create',
   UPDATE_ROLE_BY_ROLE_ID = 'roles/:roleId/update',

@@ -25,7 +25,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from '@app/common/decorators';
 import { PermissionsGuard } from '@app/common/guards/permission.guard';
 import { RequiredPermissions } from '@app/common/decorators/permission.decorator';
-import { PERMISSION } from '@app/common/enums'; // Direct import
+import { PERMISSION } from '@app/common/enums';
+import { Endpoint as EP } from './enums'; // Direct import
 
 @Controller({
   path: 'api',
@@ -34,25 +35,25 @@ import { PERMISSION } from '@app/common/enums'; // Direct import
 export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 
-  @Post('registration')
+  @Post(EP.REGISTRATION)
   registration(@Body() registrationDto: RegistrationDto) {
     return this.apiService.registration(registrationDto);
   }
 
-  @Post('login')
+  @Post(EP.LOGIN)
   login(@Body() loginDto: LoginDto) {
     return this.apiService.login(loginDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('profile')
+  @Get(EP.GET_USER_PROFILE)
   getProfile(@CurrentUser() user: UserPayload) {
     return user;
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.USER_UPDATE)
-  @Patch('profile')
+  @Patch(EP.UPDATE_USER_BY_USER_ID)
   updateProfile(
     @CurrentUser() user: UserPayload,
     @Body() updateUserDto: UpdateUserDto,
@@ -63,35 +64,35 @@ export class ApiController {
   // Roles
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.ROLE_CREATE)
-  @Post('roles')
+  @Post(EP.CREATE_ROLE)
   createRole(@Body() createRoleDto: CreateRoleDto) {
     return this.apiService.createRole(createRoleDto);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.ROLE_VIEW)
-  @Get('roles')
+  @Get(EP.GET_ALL_ROLES)
   findAllRoles() {
     return this.apiService.findAllRoles();
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.ROLE_VIEW)
-  @Get('roles/:id')
+  @Get(EP.GET_ROLE_BY_ROLE_ID)
   findOneRole(@Param('id') id: string) {
     return this.apiService.findOneRole(+id);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.ROLE_UPDATE)
-  @Patch('roles/:id')
+  @Patch(EP.UPDATE_ROLE_BY_ROLE_ID)
   updateRole(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
     return this.apiService.updateRole(+id, updateRoleDto);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.ROLE_DELETE)
-  @Delete('roles/:id')
+  @Delete(EP.DELETE_ROLE_BY_ROLE_ID)
   removeRole(@Param('id') id: string) {
     return this.apiService.removeRole(+id);
   }
@@ -99,33 +100,33 @@ export class ApiController {
   // Permissions
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
-  @Post('permissions')
+  @Post(EP.CREATE_PERMISSION)
   createPermission(@Body() createPermissionDto: CreatePermissionDto) {
     return this.apiService.createPermission(createPermissionDto);
   }
 
-  @Post('bulk-permissions')
+  @Post(EP.CREATE_BULK_PERMISSIONS)
   createBulkPermission(@Body() createPermissionDto: any) {
     return this.apiService.createBulkPermission(createPermissionDto);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.PERMISSION_VIEW)
-  @Get('permissions')
+  @Get(EP.GET_ALL_PERMISSIONS)
   findAllPermissions() {
     return this.apiService.findAllPermissions();
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.PERMISSION_VIEW)
-  @Get('permissions/:id')
+  @Get(EP.GET_PERMISSION_BY_PERMISSION_ID)
   findOnePermission(@Param('id') id: string) {
     return this.apiService.findOnePermission(+id);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
-  @Patch('permissions/:id')
+  @Patch(EP.UPDATE_PERMISSION_BY_PERMISSION_ID)
   updatePermission(
     @Param('id') id: string,
     @Body() updatePermissionDto: UpdatePermissionDto,
@@ -135,7 +136,7 @@ export class ApiController {
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)
-  @Delete('permissions/:id')
+  @Delete(EP.DELETE_PERMISSION_BY_PERMISSION_ID)
   removePermission(@Param('id') id: string) {
     return this.apiService.removePermission(+id);
   }

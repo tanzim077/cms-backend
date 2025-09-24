@@ -53,16 +53,17 @@ export class ApiController {
     return user;
   }
 
-  // ---------- Permission ------------------
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.USER_UPDATE)
-  @Patch(EP.UPDATE_USER_BY_USER_ID)
+  @Patch(EP.UPDATE_MY_PROFILE)
   updateProfile(
     @CurrentUser() user: UserPayload,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.apiService.updateProfile(user.id, updateUserDto);
   }
+
+  // ---------- Permission ------------------
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @RequiredPermissions(PERMISSION.PERMISSION_ASSIGN)

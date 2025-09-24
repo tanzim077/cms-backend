@@ -28,6 +28,7 @@ export enum Endpoint {
   DEACTIVATE_USER_BY_USER_ID = 'users/:userId/deactivate',
   GET_USER_BY_USER_ID = 'users/:userId',
   UPDATE_USER_BY_USER_ID = 'users/:userId/update',
+  UPDATE_MY_PROFILE = 'users/my-profile/update',
   DELETE_USER_BY_USER_ID = 'users/:userId/delete',
   GET_USER_PROFILE = 'users/profile',
 

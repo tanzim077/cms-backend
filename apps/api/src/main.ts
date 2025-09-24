@@ -5,6 +5,7 @@ import { Transport } from '@nestjs/microservices';
 import * as compression from 'compression';
 import helmet from 'helmet';
 import { ApiModule } from './api.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const logger = new Logger('Api');
@@ -32,6 +33,17 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
+  // Swagger setup
+  const config = new DocumentBuilder()
+    .setTitle('CMS API')
+    .setDescription('API documentation for the Course Manager System')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
+
   await app.startAllMicroservices();
   await app.listen(app.get(ConfigService).get('PORT') as string);
   logger.log(
